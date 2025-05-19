@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.0
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - '3307:3306'
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: adminpass
+      MYSQL_DATABASE: mis_profesores
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: adminpass
+
+  frontend:
+    build:
+      context: ./mis_profesores_front
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./mis_profesores_api
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    env_file:
+      - ./mis_profesores_api/.env
+volumes:
+  db_data:
