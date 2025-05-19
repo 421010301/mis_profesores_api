@@ -1,0 +1,10 @@
+fastapi>=0.95
+uvicorn[standard]>=0.22.0
+pandas
+python-dotenv
+SQLAlchemy
+PyMySQL
+cryptography
+google-genai
+pydantic-settings
+rapidfuzz
